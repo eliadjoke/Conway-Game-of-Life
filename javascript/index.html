@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Add some basic styling for the grid cells */
+    .cell {
+      width: 20px;
+      height: 20px;
+      border: 1px solid #ccc;
+      display: inline-block;
+    }
+  </style>
+  <title>Conway's Game of Life</title>
+</head>
+<body>
+  <h1>Conway's Game of Life</h1>
+  <button onclick="startGame()">Start</button>
+  <button onclick="stopGame()">Stop</button>
+  <button onclick="clearBoard()">Clear</button>
+  <div id="board"></div>
+
+  <script>
+    const rows = 30;
+    const cols = 50;
+    let grid = createGrid(rows, cols);
+    let intervalId;
+
+    // Function to create a 2D grid
+    function createGrid(rows, cols) {
+      const grid = [];
+      for (let i = 0; i < rows; i++) {
+        grid.push(new Array(cols).fill(false));
+      }
+      return grid;
+    }
+
+    // Function to update the grid based on the rules of the game
+    function updateGrid() {
+      const newGrid = createGrid(rows, cols);
+
+      for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+          const neighbors = countNeighbors(i, j);
+          if (grid[i][j]) {
+            newGrid[i][j] = neighbors === 2 || neighbors === 3;
+          } else {
+            newGrid[i][j] = neighbors === 3;
+          }
+        }
+      }
+
+      grid = newGrid;
+      renderGrid();
+    }
+
+    // Function to count the live neighbors of a cell
+    function countNeighbors(row, col) {
+      let count = 0;
+      for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
+          const neighborRow = row + i;
+          const neighborCol = col + j;
+
+          if (neighborRow >= 0 && neighborRow < rows && neighborCol >= 0 && neighborCol < cols) {
+            count += grid[neighborRow][neighborCol] ? 1 : 0;
+          }
+        }
+      }
+      count -= grid[row][col] ? 1 : 0;
+      return count;
+    }
+
+    // Function to render the grid on the HTML page
+    function renderGrid() {
+      const boardElement = document.getElementById('board');
+      boardElement.innerHTML = '';
+
+      for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+          const cell = document.createElement('div');
+          cell.classList.add('cell');
+          cell.style.backgroundColor = grid[i][j] ? '#000' : '#fff';
+          cell.addEventListener('click', () => toggleCell(i, j));
+          boardElement.appendChild(cell);
+        }
+        boardElement.appendChild(document.createElement('br'));
+      }
+    }
+
+    // Function to toggle the state of a cell when clicked
+    function toggleCell(row, col) {
+      grid[row][col] = !grid[row][col];
+      renderGrid();
+    }
+
+    // Function to start the game loop
+    function startGame() {
+      console.log("start game")
+      intervalId = setInterval(updateGrid, 100);
+    }
+
+    // Function to stop the game loop
+    function stopGame() {
+      clearInterval(intervalId);
+    }
+
+    // Function to clear the board
+    function clearBoard() {
+      grid = createGrid(rows, cols);
+      renderGrid();
+    }
+
+    // Initial rendering of the grid
+    renderGrid();
+  </script>
+</body>
+</html>
