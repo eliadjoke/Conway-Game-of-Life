@@ -11,7 +11,7 @@ A simple implementation of Conway's Game of Life using Python and Pygame. Conway
 - Adjustable grid size, cell size, and simulation speed.
 
 ## How to Run:
-1. Clone this repository: `git clone https://github.com/your-username/conways-game-of-life.git`
+1. Clone this repository: `git clone https://github.com/eliadjoke/Conway-Game-of-Life.git`
 2. Navigate to the project directory: `cd conways-game-of-life`
 3. Install Pygame: `pip install pygame`
 4. Run the script: `python conways_game_of_life.py`
